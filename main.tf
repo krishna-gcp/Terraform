@@ -3,7 +3,7 @@ terraform {
     organization = "krishnav"
 
     workspaces {
-      name = "gcp-vm"
+      name = "terraforms"
     }
   }
 
@@ -18,12 +18,12 @@ terraform {
 provider "google" {
   project     = var.project_id
   region      = var.region
-  credentials = base64decode(var.credentials)
+  credentials = jsondecode(base64decode(var.credentials))
 }
 
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-vm"
-  machine_type = "e2-micro"
+  machine_type = "e2-medium"
   zone         = "${var.region}-a"
 
   boot_disk {
@@ -34,5 +34,9 @@ resource "google_compute_instance" "vm_instance" {
 
   network_interface {
     network = "default"
+
+    access_config {
+      // Ephemeral public IP
+    }
   }
 }
