@@ -8,7 +8,7 @@ variable "region" {
   type        = string
 }
 
-variable "location" {
-  description = "The GCP location"
+variable "credentials" {
+  description = "The base64 encoded GCP credentials JSON"
   type        = string
 }
