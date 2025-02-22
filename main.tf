@@ -1,29 +1,12 @@
-terraform {
-  cloud {
-    organization = "krishnav"
-
-    workspaces {
-      name = "terraforms"
-    }
-  }
-
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 5.0"
-    }
-  }
-}
-
 provider "google" {
-  project = var.project_id
-  region  = var.region
+  project = "mydeployments-451712"
+  region  = "us-central1"
 }
 
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-vm"
   machine_type = "e2-medium"
-  zone         = "${var.region}-a"
+  zone         = "us-central1-a"
 
   boot_disk {
     initialize_params {
