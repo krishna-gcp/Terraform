@@ -1,23 +1,30 @@
 terraform {
   cloud {
-    organization = "Krishnav"
+    organization = "krishnav"
 
     workspaces {
-      name = "Terraforms"
+      name = "gcp-vm"
+    }
+  }
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
     }
   }
 }
 
 provider "google" {
-  credentials = jsondecode(base64decode(var.google_credentials))
-  project     = var.project
-  region      = var.gcr_region
+  project     = var.project_id
+  region      = var.region
+  credentials = base64decode(var.credentials)
 }
 
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-vm"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
+  machine_type = "e2-micro"
+  zone         = "${var.region}-a"
 
   boot_disk {
     initialize_params {
@@ -27,6 +34,5 @@ resource "google_compute_instance" "vm_instance" {
 
   network_interface {
     network = "default"
-    access_config {}
   }
 }
