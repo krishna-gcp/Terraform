@@ -34,10 +34,3 @@ resource "google_compute_instance" "vm_instance" {
   }
 }
 
-variable "gcp_credentials" {
-  description = "Base64-encoded GCP service account key"
-}
-
-output "instance_name" {
-  value = google_compute_instance.vm_instance.name
-}
