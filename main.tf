@@ -24,4 +24,11 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 
-  network_interface
+  network_interface {
+    network = "default"
+
+    access_config {
+      // Assigns an ephemeral public IP
+    }
+  }
+}
