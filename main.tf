@@ -16,8 +16,8 @@ terraform {
 }
 
 provider "google" {
-  project     = var.project_id
-  region      = var.region
+  project = var.project_id
+  region  = var.region
 }
 
 resource "google_compute_instance" "vm_instance" {
@@ -34,6 +34,8 @@ resource "google_compute_instance" "vm_instance" {
   network_interface {
     network = "default"
 
-    access_config {}
+    access_config {
+      // Ephemeral public IP
+    }
   }
 }
