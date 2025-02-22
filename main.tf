@@ -11,7 +11,6 @@ terraform {
 provider "google" {
   project = "mydeployments-451712"
   region  = "us-central1"
-  credentials = jsondecode(base64decode(var.gcp_credentials))
 }
 
 resource "google_compute_instance" "vm_instance" {
