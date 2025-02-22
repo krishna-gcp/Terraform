@@ -11,6 +11,7 @@ terraform {
 provider "google" {
   project = "mydeployments-451712"
   region  = "us-central1"
+  credentials = jsondecode(base64decode(var.gcp_credentials))
 }
 
 resource "google_compute_instance" "vm_instance" {
@@ -28,7 +29,15 @@ resource "google_compute_instance" "vm_instance" {
     network = "default"
 
     access_config {
-      // Assigns an ephemeral public IP
+      // Ephemeral public IP
     }
   }
+}
+
+variable "gcp_credentials" {
+  description = "Base64-encoded GCP service account key"
+}
+
+output "instance_name" {
+  value = google_compute_instance.vm_instance.name
 }
