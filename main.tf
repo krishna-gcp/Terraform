@@ -1,58 +1,32 @@
+terraform {
+  cloud {
+    organization = "Krishnav"
 
-# ---------------------------------------------------------------------------------------------------------------------
-# LOCAL VALUE
-# ---------------------------------------------------------------------------------------------------------------------
-
-
-locals {
-  services = [
-    "sourcerepo.googleapis.com",
-    "cloudbuild.googleapis.com",
-  ]
+    workspaces {
+      name = "Terraform"
+    }
+  }
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# ENABLED THE API SERVICE
-# ---------------------------------------------------------------------------------------------------------------------
-
-resource "google_project_service" "enabled_service" {
-  for_each = toset(local.services)
-  project  = var.project
-  service  = each.key
+provider "google" {
+  project     = var.project_id
+  region      = var.region
+  credentials = file("key.json")
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# DEPLOY A GOOGLE CLOUD SOURCE REPOSITORY
-# ---------------------------------------------------------------------------------------------------------------------
+resource "google_compute_instance" "vm_instance" {
+  name         = "terraform-vm"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
 
-resource "google_sourcerepo_repository" "repo" {
-  name = var.repository_name
-  depends_on = [
-    google_project_service.enabled_service["sourcerepo.googleapis.com"]
-  ]
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
-# CREATE A CLOUD BUILD TRIGGER
-# ---------------------------------------------------------------------------------------------------------------------
-
-resource "google_cloudbuild_trigger" "cloud_build_trigger" {
-  description = "Cloud Source Repository Trigger ${var.repository_name} (${var.branch_name})"
-
-  trigger_template {
-    branch_name = var.branch_name
-    repo_name   = var.repository_name
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
   }
 
-  substitutions = {
-    _LOCATION   = var.location
-    _GCR_REGION = var.gcr_region
+  network_interface {
+    network = "default"
+    access_config {}
   }
-
-  filename = "cloudbuild.yaml"
-  included_files = [
-    "*"
-  ]
-
-  depends_on = [google_sourcerepo_repository.repo]
 }
