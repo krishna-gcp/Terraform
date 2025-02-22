@@ -1,10 +1,18 @@
-provider "google" {
-  project     = "mydeployments-451712"
-  region      = "us-central1"
-  credentials = jsondecode(base64decode(var.GOOGLE_CREDENTIALS))
+terraform {
+  cloud {
+    organization = "krishnav"
+
+    workspaces {
+      name = "terraforms"
+    }
+  }
 }
 
-variable "GOOGLE_CREDENTIALS" {}
+provider "google" {
+  project     = "mydeployments-451712"
+  region      = var.region
+  credentials = jsondecode(base64decode(var.GOOGLE_CREDENTIALS))
+}
 
 resource "google_compute_instance" "vm_instance" {
   name         = "test-vm"
