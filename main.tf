@@ -9,8 +9,9 @@ terraform {
 }
 
 provider "google" {
-  project     = var.project_id
-  region      = var.region
+  credentials = jsondecode(base64decode(var.google_credentials))
+  project     = var.project
+  region      = var.gcr_region
 }
 
 resource "google_compute_instance" "vm_instance" {
