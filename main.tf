@@ -1,3 +1,13 @@
+terraform {
+  cloud {
+    organization = "krishnav"
+
+    workspaces {
+      name = "terraforms"
+    }
+  }
+}
+
 provider "google" {
   project = "mydeployments-451712"
   region  = "us-central1"
@@ -14,11 +24,4 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 
-  network_interface {
-    network = "default"
-
-    access_config {
-      // Ephemeral public IP
-    }
-  }
-}
+  network_interface
