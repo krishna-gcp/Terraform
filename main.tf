@@ -1,20 +1,13 @@
-terraform {
-  cloud {
-    organization = "krishnav"
-
-    workspaces {
-      name = "terraforms"
-    }
-  }
-}
-
 provider "google" {
-  project = "mydeployments-451712"
-  region  = "us-central1"
+  project     = "mydeployments-451712"
+  region      = "us-central1"
+  credentials = jsondecode(base64decode(var.GOOGLE_CREDENTIALS))
 }
+
+variable "GOOGLE_CREDENTIALS" {}
 
 resource "google_compute_instance" "vm_instance" {
-  name         = "terraform-vm"
+  name         = "test-vm"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
@@ -26,10 +19,6 @@ resource "google_compute_instance" "vm_instance" {
 
   network_interface {
     network = "default"
-
-    access_config {
-      // Ephemeral public IP
-    }
+    access_config {}
   }
 }
-
