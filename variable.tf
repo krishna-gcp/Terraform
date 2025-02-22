@@ -9,6 +9,7 @@ variable "region" {
 }
 
 variable "credentials" {
-  description = "The GCP service account credentials in base64 format"
+  description = "The GCP service account credentials"
   type        = string
+  sensitive   = true
 }
