@@ -1,8 +1,9 @@
-variable "project_id" {
+variable "project" {
   description = "mydeployments-451712"
+  type        = string
 }
 
-variable "region" {
-  description = "GCP Region"
-  default     = "us-central1"
+variable "gcr_region" {
+  description = "GCR region"
+  type        = string
 }
